@@ -15,49 +15,10 @@ CheckVideoRAM:
 ; ****************************************************************************
 ; From here on, we need RAM for variables and for the stack.
 ;
-; Look for RAM in the following locations:
-;    - Address B0000 - MDA video RAM.
-;    - Address B8000 - CGA video RAM.
-;    - Address A0000 - A RAM card configured to put RAM there.
-;
 ; If any of those found, set ES to it.
 ; If none found, send checkpoint 8A then halt the CPU.
 
-	; ---------------------------------------
-	; First, see if MDA video RAM is present.
-	; ---------------------------------------
-	mov	ax,SegMdaRam		; Start with MDA
-	mov	es,ax
-	mov	word [es:0],0720h	; Try one address for the moment.
-	nop				; Delay for I/O.
-	nop				; Delay for I/O.
-	cmp	word [es:0],0720h	; Read it, the same value?
-	jne	TRYCGA			; --> if no, try CGA
-	
-	__CHECKPOINT__NOSTACK__ 0x0B ;++++++++++++++++++++++++++++++++++++++++
-
-	jmp	CVREXIT			; -->
-
-	; ---------------------------------------
-	; No MDA - See if CGA video RAM present.
-	; ---------------------------------------
-TRYCGA:	mov	ax,SegCgaRam		; Try CGA.
-	mov	es,ax
-	mov	word [es:0],0720h	; Try one address for the moment.
-	nop				; Delay for I/O.
-	nop				; Delay for I/O.
-	cmp	word [es:0],0720h	; Read it, the same value?
-	jne	TRYA0000		; --> if no, try RAM at A0000.
-
-	__CHECKPOINT__NOSTACK__ 0x0C ;++++++++++++++++++++++++++++++++++++++++
-
-	jmp	CVREXIT			; -->
-
-	; ---------------------------------------
-	; No CGA - See if RAM at address A0000 is present.
-	; ---------------------------------------
-TRYA0000:
-	mov	ax,0A000h
+	mov	ax,ScreenRam
 	mov	es,ax
 	mov	word [es:0],0720h	; Try one address for the moment.
 	nop				; Delay for I/O.
@@ -103,13 +64,9 @@ CVREXIT:
 
 TVAR:
 ; ****************************************************************************
-; MDA video RAM, or CGA video RAM, or RAM at address A0000, was found.
+; Video RAM was found.
 ;
-; On entry, ES is pointing to either:
-; - Address B0000 if MDA video card RAM is present; or
-; - Address B8000 if CGA video card RAM is present; or
-; - Address A0000 if a RAM card is configured to put some RAM at A0000.
-; 
+; On entry, ES is pointing to Address F0000h
 ; This diagnostic uses only 96 bytes of the RAM. We will now test those 96 bytes before we commit to using them.
 ; 
 ;   MDA: 4 KB of video RAM. The last 96 bytes are unused by the card - what this diagnostic will use.
@@ -166,7 +123,7 @@ TVAR:
 	mov	al,'D'
 	out	dx,al
 %endif
-
+%if 0
 	; Display "Test of video RAM failed. Aborting.  <-----"
 	mov	si,TxtVrtf
 	mov	di,482			; DI := starting postion of text (offset into MDA/CGA video RAM)
@@ -179,7 +136,7 @@ TVAR:
 	jz	.S40			; --> if yes 
 	stosw				; Write character plus attribute { STOSW: AX-->[ES:DI], then DI=DI+2 }
 	jmp	.L40			; -->
-
+%endif
 	; Halt the CPU
 .S40:	cli
 	hlt

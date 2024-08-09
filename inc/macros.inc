@@ -58,10 +58,8 @@
 ..@CHECKPOINT_%1:
 	mov	al,%1
 
-	;------------------------
-	; IBM's debug port
-	; -----------------------
-	out	80h,al		; IBM AT's debug port. Rarely works for PC's and XT's.
+	mov dx, FE_Ioport
+	out dx, al				; issue the error for FE scoping
 
 %ifdef USE_LPT
 	;------------------------

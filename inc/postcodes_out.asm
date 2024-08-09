@@ -31,10 +31,8 @@ CheckpointStack:
 	out	dx,al
 %endif
 
-	;--------------------------------------------
-	; Output the byte to IBM AT's debug port.  Rarely works for PC's and XT's.
-	;--------------------------------------------
-	out	80h,al
+	mov dx, FE_Ioport
+	out dx, al				; issue the error for FE scoping
 	
 	;--------------------------------------------
 	; Display the byte in the top-right corner of the screen.
