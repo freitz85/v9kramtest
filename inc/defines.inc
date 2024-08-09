@@ -104,5 +104,26 @@ NmiFlag		equ	0404h		; Address = 0000:0404 - Normally 0. NMI handler will set thi
 ; ;-------------------------------------------------------------------------------
 InvScreenRAM	equ	4000			; Offset of unused portion of MDA/CGA video RAM
 
+
+
+
+
+SegExtraIo      equ 0E000h
+
+PicPort0        equ 00h             ; Programmable Interrupt Controller
+PicPort1        equ 01h
+
+Crt             equ 0E800h          ; I/O register for CRT controller
+ScreenRam       equ 0F000h          ; Segment of screen RAM
+FE_Ioport       equ 0FFFFh          ; Port to tell field service what's wrong
+
+FE_screen	    equ	01h             ; FE error unreproducable screen ram error
+FE_bad_chksum	equ	02h             ; FE error code for bad ROM checksum
+FE_16K		    equ	03h             ; FE error unreproducable error in first 16K
+FE_bad_screen	equ	10h             ; FE error code for bad screen ram
+FE_screen_mult	equ	20h             ; FE error code for bad screen ram, >1 bit error
+FE_16K_error	equ	30h             ; FE error code for error in first 16K
+FE_16K_mult	    equ	40h             ; FE error code for error in first 16K, >1 bit
+
 %endif
 [list +]
