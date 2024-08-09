@@ -43,3 +43,30 @@ OneSecDelay:
 	jnz	.L10
 	ret
 
+
+
+; ****************************************************************************
+; Delay for at least n*100 microseconds
+;
+;   INPUTS: AX = n (number of 100us to wait)
+;
+;  OUTPUTS: AX destroyed
+;
+; DESTROYS: {nothing}
+;
+; ****************************************************************************
+Time:
+	push cx
+	or  ax, ax		; wait for no time at all?
+	jz  .time_is_up
+
+.time_loop:
+	mov cl, 78h		; fine-tuned constant
+	shr cl, cl
+	dec ax			; this loop is approx. 100 microseconds
+	jnz .time_loop
+
+.time_is_up:
+	pop cx
+	ret
+

@@ -162,6 +162,18 @@ TVAR:
 
 	__CHECKPOINT__ 0x0E ;++++++++++++++++++++++++++++++++++++++++
 
+; ****************************************************************************
+; Blink the LEDs on the floppies to tell the user we're alive
+blink_leds:
+	mov ax, As6500			; address the floppy 
+	mov es, ax
+
+	mov byte [es:Via6OraIra], (F_led0+F_led1)	; turn both LEDs on
+	mov ax, 5000			; wait half a second
+	;call time
+
+	and byte [es:Via6OraIra], ~(F_led0+F_led1)	; trun LEDs off
+
 
 clear_rwdata:
 ; ****************************************************************************

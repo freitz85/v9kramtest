@@ -5,10 +5,10 @@ cold_boot:
 
 ; Adapted from Victor 9000 ROM
 
-	mov ax, Crt				; access CRT controller
+	mov ax, As6500				; access CRT controller
 	mov es, ax
-	mov byte [es:0], 1
-	mov byte [es:1], 0			; shut down CRT
+	mov byte [es:CrtRg0], 1
+	mov byte [es:CrtRg1], 0		; shut down CRT
 
 ;	Test screen ram, to ensure CRT could possibly operate.
 ;	Test with 55AA and AA55 hex.  Leave memory at 0000.

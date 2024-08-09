@@ -113,15 +113,17 @@ SegExtraIo      equ 0E000h
 PicPort0        equ 00h             ; Programmable Interrupt Controller
 PicPort1        equ 01h
 
-Codec           equ 0E800h
+As6500          equ 0E800h          ; I/O port for 6500 (CRT and floppy)
+CrtRg0          equ 00h
+CrtRg1          equ 01h
 CodecClk        equ 84h
 CodecCtl        equ 8Bh
 CodecSda        equ 60h
 Volume          equ 2Ah
 VolumeCtl       equ 2Bh
 VolumeClk       equ 28h
+Via6OraIra      equ 0CFh
 
-Crt             equ 0E800h          ; I/O register for CRT controller
 ScreenRam       equ 0F000h          ; Segment of screen RAM
 FE_Ioport       equ 0FFFFh          ; Port to tell field service what's wrong
 
@@ -132,6 +134,9 @@ FE_bad_screen	equ	10h             ; FE error code for bad screen ram
 FE_screen_mult	equ	20h             ; FE error code for bad screen ram, >1 bit error
 FE_16K_error	equ	30h             ; FE error code for error in first 16K
 FE_16K_mult	    equ	40h             ; FE error code for error in first 16K, >1 bit
+
+F_led0          equ 01h
+F_led1          equ 04h
 
 %endif
 [list +]

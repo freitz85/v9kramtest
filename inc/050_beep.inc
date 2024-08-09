@@ -7,11 +7,9 @@ InitBeep:
 ; For those without an MDA/CGA card, and without a parallel/LPT reader, and without a serial reader, 
 ; this beeping indicates that the code has started to execute.
 
-	mov ax, Codec
+	mov ax, As6500
 	mov es, ax
-	mov al, [es:CodecCtl]
-	and al, 3Fh						; disable codec clock
-	mov [es:CodecCtl], al
+	and byte [es:CodecCtl], 3Fh			; disable codec clock
 
 	mov ax, 5E00h					; initialize codec SDA to input mode
 	mov word [es:CodecSda], ax
